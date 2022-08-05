@@ -16,7 +16,7 @@ b /_________\ c
 
 '''
 #base storey
-r = 1.0
+r = sf.Symbol('r')
 a0 = o.compose(sf.Pose3(
                         sf.Rot3.from_yaw_pitch_roll(m.radians(90),0,0),
                         sf.V3(0, r, 0)))
@@ -25,11 +25,11 @@ b0 = o.compose(sf.Pose3(
                         sf.V3(-r * m.sin(m.radians(60)), -r * m.cos(m.radians(60)), 0)))
 c0 = o.compose(sf.Pose3(
                         sf.Rot3.from_yaw_pitch_roll(m.radians(-30),0,0),
-                        sf.V3(+r * m.sin(m.radians(60)), -r * m.cos(m.radians(60)), 0)))
+                        sf.V3(r * m.sin(m.radians(60)), -r * m.cos(m.radians(60)), 0)))
 
 
 #first storey frames
-l0 = 0.5
+l0 = sf.Symbol('l0')
 qa0 = sf.Symbol("qa0")
 qb0 = sf.Symbol("qb0")
 qc0 = sf.Symbol("qc0")
@@ -53,7 +53,7 @@ c1 = c1.compose(sf.Pose3(
                         sf.V3(0, l0, 0)))
 
 #second storey frames
-l1 = 0.5
+l1 = sf.Symbol('l1')
 qa1 = sf.Symbol("qa1")
 qb1 = sf.Symbol("qb1")
 qc1 = sf.Symbol("qc1")
@@ -80,10 +80,15 @@ a2t = a2.t.simplify()
 b2t = b2.t.simplify()
 c2t = c2.t.simplify()
 
-u = (a2t - b2t).normalized().simplify()
-v = (a2.t - c2.t).normalized().simplify()
-r3_plane = sf.Rot3.from_two_unit_vectors(u,v)
-ypr_plane = r3_plane.to_yaw_pitch_roll()
+
+t_plane = (a2.t + b2.t + c2.t)/3
+v = (a2.t - t_plane).normalized()
+u = (c2.t - t_plane).normalized()
+w = u.cross(v).normalized()
+u = -w.cross(v)
+r_plane = sf.Rot3.from_rotation_matrix(u.row_join(v).row_join(w))
+
+ypr_plane = r_plane.to_yaw_pitch_roll()
 pitch = ypr_plane[0]
 roll = ypr_plane[1]
 

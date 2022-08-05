@@ -3,7 +3,7 @@ import math as m
 import matplotlib.pyplot as plt
 from plot import plot_pose3_on_axes, set_axes_equal, plot_triangle, plot_line
 import numpy as np 
-o = sf.Pose3()
+
 
 ''' 
        a0
@@ -16,13 +16,14 @@ b0 /_________\ c0
 '''
 #base storey
 r = 1.0
-a0 = o.compose(sf.Pose3(
+o_base = sf.Pose3()
+a0 = o_base.compose(sf.Pose3(
                         sf.Rot3.from_yaw_pitch_roll(m.radians(90),0,0),
                         sf.V3(0, r, 0)))
-b0 = o.compose(sf.Pose3(
+b0 = o_base.compose(sf.Pose3(
                         sf.Rot3.from_yaw_pitch_roll(m.radians(210),0,0),
                         sf.V3(-r * m.sin(m.radians(60)), -r * m.cos(m.radians(60)), 0)))
-c0 = o.compose(sf.Pose3(
+c0 = o_base.compose(sf.Pose3(
                         sf.Rot3.from_yaw_pitch_roll(m.radians(-30),0,0),
                         sf.V3(+r * m.sin(m.radians(60)), -r * m.cos(m.radians(60)), 0)))
 
@@ -51,7 +52,7 @@ c1 = c1.compose(sf.Pose3(
 
 #second storey frames
 l1 = 0.5
-qa1 = qb1 = qc1 = m.radians(30)
+qa1 = qb1 = qc1 = m.radians(60)
 a2 = a1.compose(sf.Pose3(
                         sf.Rot3.from_yaw_pitch_roll(0,0,qa1),
                         sf.V3()))
@@ -73,19 +74,20 @@ c2 = c2.compose(sf.Pose3(
 
 t_plane = (a2.t + b2.t + c2.t)/3
 v = (a2.t - t_plane).normalized()
-u = (a2.t - b2.t).normalized()
-r_plane = sf.Rot3.from_two_unit_vectors(v,u)
+u = (c2.t - t_plane).normalized()
+w = u.cross(v).normalized()
+u = -w.cross(v)
+r_plane = sf.Rot3.from_rotation_matrix(np.asarray([u,v,w]).T)
 
 o_plane = sf.Pose3(R = r_plane, t = t_plane)
-print('plane yaw - pitch - roll')
-print([num.evalf() for num in r_plane.to_yaw_pitch_roll()])
-
+print('plane yaw - pitch - roll in degrees')
+print([m.degrees(num.evalf()) for num in r_plane.to_yaw_pitch_roll()])
 
 fig = plt.figure(); 
 ax = fig.add_subplot(projection='3d')
 ax.set_xlabel('x'); ax.set_ylabel('y'); ax.set_zlabel('z')
 #origin
-plot_pose3_on_axes(ax, o); ax.text(*o.t, 'o')
+plot_pose3_on_axes(ax, o_base); ax.text(*o_base.t, 'o_base')
 
 #base storey
 plot_pose3_on_axes(ax, a0); ax.text(*a0.t,'a0')
