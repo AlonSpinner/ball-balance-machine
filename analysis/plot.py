@@ -1,6 +1,7 @@
 import symforce.symbolic as sf
 import matplotlib.pyplot as plt
 import numpy as np
+import mpl_toolkits.mplot3d as a3
 
 
 #copied and edited shamelessly from https://github.com/borglab/gtsam/blob/develop/python/gtsam/utils/plot.py
@@ -46,3 +47,15 @@ def set_axes_equal(ax):
     ax.set_xlim3d([origin[0] - radius, origin[0] + radius])
     ax.set_ylim3d([origin[1] - radius, origin[1] + radius])
     ax.set_zlim3d([origin[2] - radius, origin[2] + radius])
+
+def plot_line(ax : plt.Axes, p1, p2, color = 'black') -> None:
+    x = [p1[0], p2[0]]
+    y = [p1[1], p2[1]]
+    z = [p1[2], p2[2]]
+    ax.plot(x,y,z,color = color)
+
+def plot_triangle(ax : plt.Axes, vtx : np.ndarray, color = 'red', alpha = 0.5) -> None:
+    tri =  a3.art3d.Poly3DCollection([vtx])
+    tri.set_color(color)
+    tri.set_alpha(alpha)
+    ax.add_collection(tri)
