@@ -71,6 +71,11 @@ c2 = c2.compose(sf.Pose3(
                         sf.Rot3(),
                         sf.V3(0, l1, 0)))
 
+u = (a2.t - b2.t).normalized()
+v = (a2.t - c2.t).normalized()
+r_plane = sf.Rot3.from_two_unit_vectors(u,v)
+print('plane yaw - pitch - roll')
+print([num.evalf() for num in r_plane.to_yaw_pitch_roll()])
 
 
 fig = plt.figure(); 
@@ -95,5 +100,6 @@ plot_pose3_on_axes(ax, b2)
 plot_pose3_on_axes(ax, c2)
 
 set_axes_equal(ax)
+
 plt.show()
 

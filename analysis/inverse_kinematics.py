@@ -76,10 +76,24 @@ c2 = c2.compose(sf.Pose3(
                         sf.Rot3(),
                         sf.V3(0, l1, 0)))
 
+a2t = a2.t.simplify()
+b2t = b2.t.simplify()
+c2t = c2.t.simplify()
+
+u = (a2t - b2t).normalized().simplify()
+v = (a2.t - c2.t).normalized().simplify()
+r3_plane = sf.Rot3.from_two_unit_vectors(u,v)
+ypr_plane = r3_plane.to_yaw_pitch_roll()
+pitch = ypr_plane[0]
+roll = ypr_plane[1]
+
 d_sqrd = 3 * r**2
-eq_a2b2 = sp.Eq((a2.t - b2.t).squared_norm().simplify(), d_sqrd)
+eq_a2b2 = sp.Eq((a2.t - b2.t).squared_norm(), d_sqrd)
 eq_a2c2 = sp.Eq((a2.t - c2.t).squared_norm(), d_sqrd)
 eq_b2c2 = sp.Eq((b2.t - c2.t).squared_norm(), d_sqrd)
+
+sol = sp.solve([eq_a2b2, eq_a2c2, eq_b2c2])
+test = 1
 
 # fig = plt.figure(); 
 # ax = fig.add_subplot(projection='3d')
