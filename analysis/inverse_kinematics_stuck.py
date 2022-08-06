@@ -4,7 +4,7 @@ import math as m
 import matplotlib.pyplot as plt
 from plot import plot_pose3_on_axes, set_axes_equal
 
-o = sf.Pose3()
+o_base = sf.Pose3()
 
 ''' 
        a
@@ -17,15 +17,15 @@ b /_________\ c
 '''
 #base storey
 r = sf.Symbol('r')
-a0 = o.compose(sf.Pose3(
-                        sf.Rot3.from_yaw_pitch_roll(m.radians(90),0,0),
+a0 = o_base.compose(sf.Pose3(
+                        sf.Rot3.from_yaw_pitch_roll(sf.pi/2,0,0), #90 degrees
                         sf.V3(0, r, 0)))
-b0 = o.compose(sf.Pose3(
-                        sf.Rot3.from_yaw_pitch_roll(m.radians(210),0,0),
-                        sf.V3(-r * m.sin(m.radians(60)), -r * m.cos(m.radians(60)), 0)))
-c0 = o.compose(sf.Pose3(
-                        sf.Rot3.from_yaw_pitch_roll(m.radians(-30),0,0),
-                        sf.V3(r * m.sin(m.radians(60)), -r * m.cos(m.radians(60)), 0)))
+b0 = o_base.compose(sf.Pose3(
+                        sf.Rot3.from_yaw_pitch_roll(sf.pi *(1 +1/6),0,0), #210 degrees
+                        sf.V3(-r * sf.sin(sf.pi/3), -r * sf.cos(sf.pi/3), 0))) #60 degrees
+c0 = o_base.compose(sf.Pose3(
+                        sf.Rot3.from_yaw_pitch_roll(-sf.pi/6,0,0), #-30 degrees
+                        sf.V3(r * sf.sin(sf.pi/3), -r * sf.cos(sf.pi/3), 0)))
 
 
 #first storey frames
@@ -76,51 +76,9 @@ c2 = c2.compose(sf.Pose3(
                         sf.Rot3(),
                         sf.V3(0, l1, 0)))
 
-a2t = a2.t.simplify()
-b2t = b2.t.simplify()
-c2t = c2.t.simplify()
-
-
-t_plane = (a2.t + b2.t + c2.t)/3
-v = (a2.t - t_plane).normalized()
-u = (c2.t - t_plane).normalized()
-w = u.cross(v).normalized()
-u = -w.cross(v)
-r_plane = sf.Rot3.from_rotation_matrix(u.row_join(v).row_join(w))
-
-ypr_plane = r_plane.to_yaw_pitch_roll()
-pitch = ypr_plane[0]
-roll = ypr_plane[1]
-
 d_sqrd = 3 * r**2
 eq_a2b2 = sp.Eq((a2.t - b2.t).squared_norm(), d_sqrd)
 eq_a2c2 = sp.Eq((a2.t - c2.t).squared_norm(), d_sqrd)
 eq_b2c2 = sp.Eq((b2.t - c2.t).squared_norm(), d_sqrd)
 
-sol = sp.solve([eq_a2b2, eq_a2c2, eq_b2c2])
-test = 1
-
-# fig = plt.figure(); 
-# ax = fig.add_subplot(projection='3d')
-# ax.set_xlabel('x'); ax.set_ylabel('y'); ax.set_zlabel('z')
-# #origin
-# plot_pose3_on_axes(ax, o)
-
-# #base storey
-# plot_pose3_on_axes(ax, a0)
-# plot_pose3_on_axes(ax, b0)
-# plot_pose3_on_axes(ax, c0)
-
-# #first storey, after link l0
-# plot_pose3_on_axes(ax, a1)
-# plot_pose3_on_axes(ax, b1)
-# plot_pose3_on_axes(ax, c1)
-
-# #second storey, after link l1
-# plot_pose3_on_axes(ax, a2)
-# plot_pose3_on_axes(ax, b2)
-# plot_pose3_on_axes(ax, c2)
-
-# set_axes_equal(ax)
-# plt.show()
-
+sol = sp.solve([eq_a2b2, eq_a2c2, eq_b2c2],[qa1,qb1,qc1])

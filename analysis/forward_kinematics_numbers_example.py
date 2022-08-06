@@ -11,7 +11,7 @@ import numpy as np
      / |r\           |___x
     /  |  \ 
    /   o   \
-b0 /_________\ c0
+b0/_________\ c0
 
 '''
 #base storey
@@ -30,7 +30,7 @@ c0 = o_base.compose(sf.Pose3(
 
 #first storey frames
 l0 = 0.5
-qa0 = qb0 = qc0 = m.radians(80)
+qa0 = qb0 = qc0 = m.radians(10)
 a1 = a0.compose(sf.Pose3(
                         sf.Rot3.from_yaw_pitch_roll(0,0,qa0),
                         sf.V3()))
@@ -52,7 +52,7 @@ c1 = c1.compose(sf.Pose3(
 
 #second storey frames
 l1 = 0.5
-qa1 = qb1 = qc1 = m.radians(60)
+qa1 = qb1 = qc1 = m.radians(90)
 a2 = a1.compose(sf.Pose3(
                         sf.Rot3.from_yaw_pitch_roll(0,0,qa1),
                         sf.V3()))
