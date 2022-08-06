@@ -18,14 +18,14 @@ b0 /_________\ c0
 r = 1.0
 o_base = sf.Pose3()
 a0 = o_base.compose(sf.Pose3(
-                        sf.Rot3.from_yaw_pitch_roll(m.radians(90),0,0),
+                        sf.Rot3.from_yaw_pitch_roll(sf.pi/2,0,0), #90 degrees
                         sf.V3(0, r, 0)))
 b0 = o_base.compose(sf.Pose3(
-                        sf.Rot3.from_yaw_pitch_roll(m.radians(210),0,0),
-                        sf.V3(-r * m.sin(m.radians(60)), -r * m.cos(m.radians(60)), 0)))
+                        sf.Rot3.from_yaw_pitch_roll(sf.pi *(1 +1/6),0,0), #210 degrees
+                        sf.V3(-r * sf.sin(sf.pi/3), -r * sf.cos(sf.pi/3), 0))) #60 degrees
 c0 = o_base.compose(sf.Pose3(
-                        sf.Rot3.from_yaw_pitch_roll(m.radians(-30),0,0),
-                        sf.V3(+r * m.sin(m.radians(60)), -r * m.cos(m.radians(60)), 0)))
+                        sf.Rot3.from_yaw_pitch_roll(-sf.pi/6,0,0), #-30 degrees
+                        sf.V3(+r * sf.sin(sf.pi/3), -r * sf.cos(sf.pi/3), 0)))
 
 
 #first storey frames
@@ -77,7 +77,7 @@ v = (a2.t - t_plane).normalized()
 u = (c2.t - t_plane).normalized()
 w = u.cross(v).normalized()
 u = -w.cross(v)
-r_plane = sf.Rot3.from_rotation_matrix(np.asarray([u,v,w]).T)
+r_plane = sf.Rot3.from_rotation_matrix(np.asarray([u.evalf(),v.evalf(),w.evalf()]).T)
 
 o_plane = sf.Pose3(R = r_plane, t = t_plane)
 print('plane yaw - pitch - roll in degrees')
