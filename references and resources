@@ -1,0 +1,23 @@
+SOURCE IDEA
+https://github.com/yR94/ball-balancing-platform
+https://www.linkedin.com/posts/yotam-r_people-often-ask-me-what-a-control-systems-ugcPost-6954467256336576512-f_jh?utm_source=linkedin_share&utm_medium=member_desktop_web
+
+KLAMPT
+http://motion.cs.illinois.edu/software/klampt/latest/pyklampt_docs/Manual-Installation.html
+https://github.com/krishauser/Klampt
+
+
+ROBOTICS TOOLBOX
+https://github.com/petercorke/robotics-toolbox-python
+https://petercorke.github.io/robotics-toolbox-python/intro.html
+https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=9561366
+
+SPATIAL MATH TOOLBOX
+https://github.com/petercorke/spatialmath-python
+
+TINYIK - tinyik is a simple and naive inverse kinematics solver. (solves numerically)
+https://github.com/lanius/tinyik
+
+
+A python based system for generating closed-form solutions to the manipulator inverse kinematics problem using behavior trees for action selection. Solutions are fully symbolic and are output as LaTex, Python, and C++.
+https://github.com/uw-biorobotics/IKBT
