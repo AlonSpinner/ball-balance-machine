@@ -6,10 +6,10 @@
 #include "TouchScreen.h"
 #include <Servo.h>
 
-#define YP A2  // must be an analog pin, use "An" notation!
+#define YP A0  // must be an analog pin, use "An" notation!
+#define YM A1   // can be a digital pin
+#define XP A2   // can be a digital pin
 #define XM A3  // must be an analog pin, use "An" notation!
-#define YM 8   // can be a digital pin
-#define XP 9   // can be a digital pin
 
 Servo servoA, servoB, servoC;
 
@@ -28,9 +28,9 @@ TouchScreen ts = TouchScreen(XP, YP, XM, YM, 300);
 
 void setup(void) {
   Serial.begin(9600);
-  servoA.attach(2);
-  servoB.attach(3);
-  servoC.attach(4);
+  servoA.attach(3);
+  servoB.attach(5);
+  servoC.attach(6);
 }
 
 float mymap(float x, float fromLow, float fromHigh, float toLow, float toHigh) {
