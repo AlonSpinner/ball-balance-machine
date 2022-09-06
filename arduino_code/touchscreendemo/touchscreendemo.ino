@@ -5,11 +5,10 @@
 #include <stdint.h>
 #include "TouchScreen.h"
 
-#define YP A2  // must be an analog pin, use "An" notation!
+#define YP A0  // must be an analog pin, use "An" notation!
+#define YM A1   // can be a digital pin
+#define XP A2   // can be a digital pin
 #define XM A3  // must be an analog pin, use "An" notation!
-#define YM 8   // can be a digital pin
-#define XP 9   // can be a digital pin
-
 float x, y;
 
 // For better pressure precision, we need to know the resistance
